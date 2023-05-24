@@ -6,18 +6,23 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import { makeServer } from "./server";
+import './custom-theme.less';
+import { BrowserRouter } from "react-router-dom";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
+console.log(store,"store");
 
 // Call make Server
 makeServer();
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
     <Provider store={store}>
       <App />
     </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

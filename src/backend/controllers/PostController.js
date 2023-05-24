@@ -65,6 +65,7 @@ export const getAllUserPostsHandler = function (schema, request) {
 
 export const createPostHandler = function (schema, request) {
   const user = requiresAuth.call(this, request);
+  console.log(request,"req");
   try {
     if (!user) {
       return new Response(
@@ -78,9 +79,11 @@ export const createPostHandler = function (schema, request) {
       );
     }
     const { postData } = JSON.parse(request.requestBody);
+    console.log(postData, "req body");
     const post = {
       _id: uuid(),
-      ...postData,
+      content:postData,
+      comments:[],
       likes: {
         likeCount: 0,
         likedBy: [],
@@ -134,7 +137,7 @@ export const editPostHandler = function (schema, request) {
         }
       );
     }
-    post = { ...post, ...postData };
+    post = { ...post,content:postData };
     this.db.posts.update({ _id: postId }, post);
     return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
