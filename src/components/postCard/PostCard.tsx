@@ -1,8 +1,8 @@
 import { Avatar, Card, Modal } from "antd";
 import React, { useState } from "react";
 import {
-  LikeFilled,
-  LikeOutlined,
+  HeartFilled,
+  HeartOutlined,
   CommentOutlined,
   SaveFilled,
   SaveOutlined,
@@ -15,6 +15,10 @@ import { editUserPost } from "../../features/post/helpers/editPost";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { deleteUserPost } from "../../features/post/helpers/deleteUserPost";
 import { getAllPosts } from "../../features/post/helpers/getAllPost";
+import { likeUserPost } from "../../features/post/helpers/likeUserPost";
+import { dislikePost } from "../../features/post/helpers/dislikePost";
+import { bookMarkPost } from "../../features/bookmark/helpers/bookMarkPost";
+import { removeBookMarkedPost } from "../../features/bookmark/helpers/removeBookMarkPost";
 // {
 //     "_id": "2a2224ea-eab3-4fcc-ae91-abc3aaff6e0c",
 //     "content": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
@@ -88,8 +92,13 @@ const PostCard = ({ data }: any) => {
 
   const { content, username, likes } = data;
 
+  console.log(data,"dataaa");
+  
   const dispatch = useAppDispatch();
-  const { social_media_token } = useAppSelector((store) => store.auth);
+  const { social_media_token, authUserData } = useAppSelector(
+    (store) => store.auth
+  );
+  const { allBookMarks } = useAppSelector((store) => store.bookmark);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [postContent, setPostContent] = useState(content);
@@ -135,6 +144,11 @@ const PostCard = ({ data }: any) => {
     },
   ];
 
+  const isLiked = "";
+  const isBookMarked = allBookMarks?.find((post:any) => post?._id === data?._id);
+  console.log(allBookMarks, "card");
+  console.log(isBookMarked,"auht");
+  
   return (
     <div className="mr-sm">
       <Card
@@ -142,13 +156,64 @@ const PostCard = ({ data }: any) => {
         actions={[
           <div className="common-flex js-around">
             {" "}
-            {likes.likeCount > 1 ? (
-              <LikeFilled style={{ color: "#9254de" }} />
-            ) : (
-              <LikeOutlined style={{ color: "#9254de" }} />
-            )}
+            <div>
+              {likes?.likedBy?.find(
+                (user: any) => user._id === authUserData._id
+              ) ? (
+                <HeartFilled
+                  style={{ color: "#9254de" }}
+                  onClick={() => {
+                    dispatch(
+                      dislikePost({
+                        token: social_media_token,
+                        postId: data._id,
+                      })
+                    );
+                    dispatch(getAllPosts());
+                  }}
+                />
+              ) : (
+                <HeartOutlined
+                  style={{ color: "#9254de" }}
+                  onClick={() => {
+                    dispatch(
+                      likeUserPost({
+                        token: social_media_token,
+                        postId: data._id,
+                      })
+                    );
+                    dispatch(getAllPosts());
+                  }}
+                />
+              )}
+              {likes?.likeCount >= 1 ? likes.likeCount : ""}
+            </div>
             <CommentOutlined style={{ color: "#9254de" }} />
-            <SaveOutlined style={{ color: "#9254de" }} />
+            {isBookMarked ? (
+              <SaveFilled
+                style={{ color: "#9254de" }}
+                onClick={() => {
+                  dispatch(
+                    removeBookMarkedPost({
+                      postId: data?._id,
+                      token: social_media_token,
+                    })
+                  );
+                }}
+              />
+            ) : (
+              <SaveOutlined
+                style={{ color: "#9254de" }}
+                onClick={() => {
+                  dispatch(
+                    bookMarkPost({
+                      postId: data?._id,
+                      token: social_media_token,
+                    })
+                  );
+                }}
+              />
+            )}
           </div>,
         ]}
       >

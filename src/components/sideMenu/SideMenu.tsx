@@ -2,10 +2,12 @@ import { Menu } from "antd";
 import React from "react";
 import type { MenuProps } from "antd";
 import {
-    HomeTwoTone ,
+  HomeTwoTone,
   MailOutlined,
-  SaveTwoTone ,UserAddOutlined 
+  SaveTwoTone,
+  UserAddOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const SideMenu = () => {
   type MenuItem = Required<MenuProps>["items"][number];
@@ -27,12 +29,17 @@ const SideMenu = () => {
   const items: MenuProps["items"] = [
     { type: "divider" },
 
-    getItem("Home", "home", <HomeTwoTone  />),
+    getItem("Home", "/", <HomeTwoTone />),
     getItem("Bookmark", "bookmark", <SaveTwoTone />),
-    getItem("Liked", "liked", <MailOutlined />),
+
     getItem("Profile", "profile", <UserAddOutlined />),
   ];
-  const onMenuItemsClick = () => {};
+
+  const navigate= useNavigate()
+  const onMenuItemsClick = (e:any) => { 
+    console.log("menu", e);
+    navigate(`${e.key}`)
+  };
   return (
     <div>
       <Menu

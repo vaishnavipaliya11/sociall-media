@@ -157,6 +157,7 @@ export const editPostHandler = function (schema, request) {
  * */
 
 export const likePostHandler = function (schema, request) {
+  console.log(request,"req");
   const user = requiresAuth.call(this, request);
   try {
     if (!user) {
@@ -164,29 +165,22 @@ export const likePostHandler = function (schema, request) {
         404,
         {},
         {
-          errors: [
-            "The username you entered is not Registered. Not Found error",
-          ],
+          errors: ["The username you entered is not Registered. Not Found error"],
         }
       );
     }
     const postId = request.params.postId;
     const post = schema.posts.findBy({ _id: postId }).attrs;
-    if (post.likes.likedBy.some((currUser) => currUser._id === user._id)) {
-      return new Response(
-        400,
-        {},
-        { errors: ["Cannot like a post that is already liked. "] }
-      );
+    if (post.likes.likedBy.some(currUser => currUser._id === user._id)) {
+      return new Response(400, {}, { errors: ["Cannot like a post that is already liked. "] });
     }
-    post.likes.dislikedBy = post.likes.dislikedBy.filter(
-      (currUser) => currUser._id !== user._id
-    );
+    post.likes.dislikedBy = post.likes.dislikedBy.filter(currUser => currUser._id !== user._id);
     post.likes.likeCount += 1;
     post.likes.likedBy.push(user);
     this.db.posts.update({ _id: postId }, { ...post, updatedAt: formatDate() });
     return new Response(201, {}, { posts: this.db.posts });
   } catch (error) {
+    console.log(error,"catch");
     return new Response(
       500,
       {},
@@ -196,6 +190,7 @@ export const likePostHandler = function (schema, request) {
     );
   }
 };
+
 
 /**
  * This handler handles disliking a post in the db.

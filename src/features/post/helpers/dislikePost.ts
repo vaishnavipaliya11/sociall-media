@@ -5,10 +5,14 @@ const dislikePost = createAsyncThunk(
   "post_dislike",
   async ({ token, postId }: any) => {
     try {
-      const { data } = await axios.post(`/api/posts/dislike/${postId}`, {
-        headers: { authorization: token },
-      });
-      console.log(data, "dislike-post");
+      const { data } = await axios.post(
+        `/api/posts/dislike/${postId}`,
+        {},
+        {
+          headers: { authorization: token },
+        }
+      );
+      return data
     } catch (error) {
       console.log(error);
     }
