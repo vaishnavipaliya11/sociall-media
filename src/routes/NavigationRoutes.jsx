@@ -7,6 +7,7 @@ import Home from "../pages/home/Home";
 import Bookmark from "../pages/bookmark/Bookmark";
 import Profile from "../pages/profile/Profile";
 import Mockman from "mockman-js";
+import SinglePost from "../pages/singlepost/SinglePost";
 const NavigationRoutes = () => {
   const { social_media_token } = useAppSelector((store) => store.auth);
   console.log(social_media_token,"social_media_token");
@@ -32,7 +33,7 @@ const NavigationRoutes = () => {
       <Route path="/bookmark" element={<Bookmark />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/mock-man" element={<Mockman />} />
-      
+      <Route path="/single_post/:postId" element={<SinglePost />} />
       </Routes>
     </>
   );

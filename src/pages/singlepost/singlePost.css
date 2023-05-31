@@ -1,0 +1,32 @@
+.singlePost-container{
+    margin-top: 2rem;
+    width: 70%;
+}
+.user-img{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+.user-content{
+    line-height: 2.5rem;
+    font-size: 1.2rem;
+    text-align: left;
+}
+.icon-container{
+    margin-top: 2rem;
+}
+.name{
+    font-weight: 700;
+}
+.comment-container{
+    padding: 0.5rem;
+    margin-top: 2rem;
+}
+.comment-name{
+    font-size: 1rem;
+    font-weight: 500;
+}
+.comment-box{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    /* style={{ "boxShadow": ""}} */
+}

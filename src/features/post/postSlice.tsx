@@ -6,11 +6,18 @@ import toast from "react-hot-toast";
 import { editUserPost } from "./helpers/editPost";
 import { likeUserPost } from "./helpers/likeUserPost";
 import { dislikePost } from "./helpers/dislikePost";
+import { getSinglePost } from "./helpers/getSinglePost";
+import { getPostComment } from "./helpers/getPostComment";
+import { addComment } from "./helpers/addComment";
+import { deleteComment } from "./helpers/deleteComment";
 
 export const initialState: initialPostType = {
   allPosts: [],
   loading: true,
   userPost: [],
+  singlePostLoading: false,
+  singlePostData: [],
+  postComment: [],
 };
 
 export const postSlice = createSlice({
@@ -62,6 +69,7 @@ export const postSlice = createSlice({
         state.loading = false;
       })
       .addCase(likeUserPost.fulfilled, (state, { payload }) => {
+        console.log(payload, "payload like");
         state.allPosts = payload.posts;
 
         state.loading = false;
@@ -75,13 +83,63 @@ export const postSlice = createSlice({
         state.loading = false;
       })
       .addCase(dislikePost.fulfilled, (state, { payload }) => {
-        state.allPosts = payload.posts;
+        console.log(payload, "payload dislike");
+
+        state.allPosts = payload?.posts;
 
         state.loading = false;
         toast.success("Post disliked!!");
       })
       .addCase(dislikePost.rejected, (state) => {
         state.loading = false;
+      });
+    builder
+      .addCase(getSinglePost.pending, (state) => {
+        state.singlePostLoading = false;
+      })
+      .addCase(getSinglePost.fulfilled, (state, { payload }) => {
+        state.singlePostData = payload;
+        state.singlePostLoading = false;
+      })
+      .addCase(getSinglePost.rejected, (state) => {
+        state.singlePostLoading = false;
+      });
+    builder
+      .addCase(getPostComment.pending, (state) => {
+        state.loading = false;
+      })
+      .addCase(getPostComment.fulfilled, (state, { payload }) => {
+        state.postComment = payload;
+        state.singlePostLoading = false;
+      })
+      .addCase(getPostComment.rejected, (state) => {
+        state.loading = false;
+      });
+    builder
+      .addCase(addComment.pending, (state) => {
+        state.loading = false;
+      })
+      .addCase(addComment.fulfilled, (state, { payload }) => {
+        console.log(payload, "add-comments-from");
+
+        state.allPosts = payload;
+        state.singlePostLoading = false;
+      })
+      .addCase(addComment.rejected, (state) => {
+        state.loading = false;
+      });
+    builder
+      .addCase(deleteComment.pending, (state) => {
+        // state.loading = false;
+      })
+      .addCase(deleteComment.fulfilled, (state, { payload }) => {
+        console.log(payload, "add-comments-from");
+
+        state.allPosts = payload;
+        state.singlePostLoading = false;
+      })
+      .addCase(deleteComment.rejected, (state) => {
+        // state.loading = false;
       });
   },
 });

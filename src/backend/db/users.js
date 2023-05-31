@@ -16,6 +16,6 @@ export const users = [
     updatedAt: formatDate(),
     bio:"tweet about web dev",
     portfolio:"www.vaishnavipaliya.com",
-    userImage:"https://minimaltoolkit.com/images/randomdata/female/101.jpg"
+    userImage:"https://minimaltoolkit.com/imagehttps://res.cloudinary.com/dxebdqoxr/image/upload/v1652987212/orion-spaces/jojo_2_dwhb1p.jpgs/randomdata/female/101.jpg"
   },
 ];

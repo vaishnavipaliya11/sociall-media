@@ -3,5 +3,8 @@ export type ICreatePost = {};
 export type initialPostType = {
   allPosts: [];
   loading: boolean;
-  userPost: any;
+  userPost?: any;
+  singlePostLoading?:boolean
+  singlePostData?:any
+  postComment:[]
 };
